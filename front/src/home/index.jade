@@ -1,0 +1,13 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title hello world
+    body
+        h1 hello world
+
+        script(src="../../bower_components/requirejs/require.js")
+        script(src="config.js")
+        script.
+            require(['src/home/index'])
+

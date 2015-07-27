@@ -1,0 +1,6 @@
+.idea/
+server/node_modules/
+front/bower_components/
+runtime/
+
+*.html
