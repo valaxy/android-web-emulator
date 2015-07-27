@@ -13,26 +13,20 @@ const LOCAL_FILE_PATH = path.join(__dirname, 'runtime', FILE_NAME)
 exports.screencap = function (cb) {
 	childProcess.exec(util.format('adb shell screencap %s', REMOTE_FILE_PATH), function (err) {
 		if (err) {
-			return console.error(err)
+			return cb(err)
 		}
 
 		childProcess.exec(util.format('adb pull %s %s', REMOTE_FILE_PATH, LOCAL_FILE_PATH), function (err) {
 			fs.readFile(LOCAL_FILE_PATH, function (err, data) {
 				if (err) {
-					return console.error(err)
+					return cb(err)
 				}
-				console.log(moment().format('mm:ss:SSSS'), data.toString('base64').length)
-				cb()
-			})
 
-			//if (err) {
-			//	return console.error(err)
-			//}
-			//
-			//
-			//var data = fs.readFileSync(LOCAL_FILE_PATH)
-			//console.log(moment().format('mm:ss:SSSS'), data.toString('base64').length)
-			//cb()
+				data = data.toString('base64')
+				console.log(moment().format('mm:ss:SSSS'), 'screencast: ', data.length)
+
+				cb(null, data)
+			})
 		})
 	})
 }
