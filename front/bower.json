@@ -17,6 +17,7 @@
     "jquery": "~2.1.4",
     "requirejs": "~2.1.19",
     "moment": "~2.10.5",
-    "algorithm-data-structure": "valaxy/algorithm-data-structure"
+    "algorithm-data-structure": "valaxy/algorithm-data-structure",
+    "mousetrap": "ccampbell/mousetrap#~1.5.3"
   }
 }

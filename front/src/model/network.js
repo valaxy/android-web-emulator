@@ -37,7 +37,7 @@ define(function (require) {
 			}
 		}
 
-		console.log(this.getPicNumPerSecond())
+		//console.log(this.getPicNumPerSecond())
 	}
 
 	Network.prototype.getPicNumPerSecond = function () {

@@ -4,14 +4,15 @@ var express    = require('express'),
     path       = require('path'),
     screencast = require('./lib/screencast'),
     adb        = require('./lib/adb'),
-    util       = require('util')
+    util       = require('util'),
+    input      = require('./lib/input')
 
 
 var app = express()
 var server = http.createServer(app)
 var io = socketIO(server)
 
-app.use('/web', express.static(path.join(__dirname, '../front')))
+app.use('/web', express.static(path.join(__dirname, './front')))
 
 
 var people = 0
@@ -42,6 +43,7 @@ io.on('connection', function (socket) {
 		}
 	})
 
+	// INPUT: tap
 	socket.on('tap', function (data) {
 		console.log('tap %j', data)
 		adb.listDevices().then(function (devices) {
@@ -52,6 +54,33 @@ io.on('connection', function (socket) {
 				console.log(command)
 			})
 		})
+	})
+
+	// INPUT: swipe
+	socket.on('swipe', function (data) {
+		console.log('swipe %j', data)
+		adb.listDevices().then(function (devices) {
+			return devices[0].id
+		}).then(function (id) {
+			var command = util.format('input swipe %s %s %s %s', data.from.x, data.from.y, data.to.x, data.to.y)
+			adb.shell(id, command).then(function () {
+				console.log(command)
+			})
+		})
+	})
+
+	// INPUT: key
+	socket.on('key', function (data) {
+
+		input.sendevent(45, 1).then(function () {
+			input.sendevent(45, 0)
+		})
+
+		//var command = util.format('')
+		//adb.shell(id, ['input keyevent 115', 'input keyevent 52']).then(function () {
+		//	console.log(command)
+		//})
+
 	})
 })
 
