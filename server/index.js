@@ -2,7 +2,9 @@ var express    = require('express'),
     socketIO   = require('socket.io'),
     http       = require('http'),
     path       = require('path'),
-    screencast = require('./lib/screencast')
+    screencast = require('./lib/screencast'),
+    adb        = require('./lib/adb'),
+    util       = require('util')
 
 
 var app = express()
@@ -38,6 +40,18 @@ io.on('connection', function (socket) {
 			screencast.stop()
 			console.log('stop screencast')
 		}
+	})
+
+	socket.on('tap', function (data) {
+		console.log('tap %j', data)
+		adb.listDevices().then(function (devices) {
+			return devices[0].id
+		}).then(function (id) {
+			var command = util.format('input tap %s %s', data.x, data.y)
+			adb.shell(id, command).then(function () {
+				console.log(command)
+			})
+		})
 	})
 })
 

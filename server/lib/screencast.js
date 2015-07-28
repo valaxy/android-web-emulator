@@ -2,8 +2,10 @@ var adb          = require('./adb'),
     async        = require('async'),
     util         = require('util'),
     EventEmitter = require('events').EventEmitter,
-    _            = require('underscore')
+    _            = require('underscore'),
+    screencap    = require('./screencap')
 
+// adb.screencap
 
 var screencast = {}
 var isStart = false
@@ -13,7 +15,11 @@ _.extend(screencast, EventEmitter.prototype)
 async.forever(
 	function (next) {
 		if (isStart) {
-			adb.screencap(function (err, data) {
+			//setTimeout(function () {
+			//	next()
+			//}, 500)
+
+			screencap(function (err, data) {
 				if (!err) {
 					screencast.emit('data', data)
 				} else {
@@ -22,7 +28,7 @@ async.forever(
 
 				setTimeout(function () {
 					next()
-				}, 400)
+				}, 0)
 			})
 		} else {
 			next()

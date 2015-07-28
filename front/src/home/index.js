@@ -1,18 +1,21 @@
 define(function (require) {
 	var io = require('socket.io')
 	var socket = io()
+	var emulator = require('./canvas')
 
-	var canvas = document.querySelector('.emulator')
-	var ctx = canvas.getContext("2d")
+	emulator.init({
+		canvas: document.querySelector('.emulator'),
+		io    : socket
+	})
+
+	emulator.setSize({
+		width : 800,
+		height: 1280
+	})
+
 
 	socket.on('data', function (data) {
-		var image = new Image()
-		image.onload = function () {
-			ctx.drawImage(image, 0, 0, 800, 1280)
-		}
-		var dataUrl = "data:image/png;base64," + data
-		image.src = dataUrl
-		console.log('receive: ', data.length)
+		emulator.drawFrame(data)
 	})
 
 

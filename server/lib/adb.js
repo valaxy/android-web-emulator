@@ -31,3 +31,5 @@ exports.screencap = function (cb) {
 	})
 }
 
+
+module.exports = require('adbkit').createClient()
